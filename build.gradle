@@ -25,6 +25,12 @@ allprojects {
 
     apply plugin: "io.spring.dependency-management"
 
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+    }
+
     dependencyManagement {
         dependencies {
             dependency ("com.google.guava:guava:${guavaVersion}")
