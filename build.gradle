@@ -33,7 +33,18 @@ allprojects {
 
     dependencyManagement {
         dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+            }
             dependency ("com.google.guava:guava:${guavaVersion}")
+        }
+    }
+}
+
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
         }
     }
 }
