@@ -12,6 +12,21 @@ import static org.assertj.core.api.Assertions.*;
 class CustomerTest {
 
     @Test
+    @DisplayName("Проверяем, что класс Customer не сломан")
+    void setterCustomerTest() {
+        //given
+        String expectedName = "updatedName";
+        String name = "nameVas";
+        Customer customer = new Customer(1, name, 2);
+
+        //when
+        customer.setName(expectedName);
+
+        //then
+        assertThat(customer.getName()).isEqualTo(expectedName);
+    }
+
+    @Test
     @DisplayName("Объект Customer как ключ в карте")
     void customerAsKeyTest() {
         //given
