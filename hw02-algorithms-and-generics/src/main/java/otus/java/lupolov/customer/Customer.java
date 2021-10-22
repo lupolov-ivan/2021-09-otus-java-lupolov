@@ -3,8 +3,8 @@ package otus.java.lupolov.customer;
 public class Customer {
 
     private final long id;
-    private final String name;
-    private final long scores;
+    private String name;
+    private long scores;
 
     public Customer(long id, String name, long scores) {
         this.id = id;
@@ -21,7 +21,7 @@ public class Customer {
     }
 
     public void setName(String name) {
-        // immutable
+        this.name = name;
     }
 
     public long getScores() {
@@ -29,7 +29,7 @@ public class Customer {
     }
 
     public void setScores(long scores) {
-        // immutable
+        this.scores = scores;
     }
 
     @Override
