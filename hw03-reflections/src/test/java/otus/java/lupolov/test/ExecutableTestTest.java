@@ -6,7 +6,7 @@ import otus.java.lupolov.test.examples.ValidTestClass;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-class RunnableTestTest {
+class ExecutableTestTest {
 
     @Test
     void run_when_test_object_has_all_type_of_methods_then_all_methods_call_success() throws Exception {

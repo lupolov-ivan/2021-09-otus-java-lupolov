@@ -6,7 +6,6 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.mockito:mockito-junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
