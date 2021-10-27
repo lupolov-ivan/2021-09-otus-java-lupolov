@@ -2,3 +2,5 @@ rootProject.name = '2021-09-30-otus-java-lupolov'
 
 include 'hw01-gradle'
 include 'hw02-algorithms-and-generics'
+include 'hw03-reflections'
+
