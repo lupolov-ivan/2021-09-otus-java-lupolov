@@ -12,3 +12,4 @@
 * \#1 module `hw01-gradle` ✅
 * \#2 module `hw02-algorithms-and-generics` ✅
 * \#3 module `hw03-reflections` ✅
+* \#4 module `hw04-garbage-collectors` ✅
