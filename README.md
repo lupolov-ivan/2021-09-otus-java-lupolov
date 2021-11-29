@@ -13,3 +13,4 @@
 * \#2 module `hw02-algorithms-and-generics` ✅
 * \#3 module `hw03-reflections` ✅
 * \#4 module `hw04-garbage-collectors` ✅
+* \#5 module `hw05-byte-codes-and-aop` ✅
