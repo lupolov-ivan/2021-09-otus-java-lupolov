@@ -3,56 +3,77 @@ package otus.java.lupolov;
 import otus.java.lupolov.atm.*;
 import otus.java.lupolov.model.CashRequestResult;
 
-import java.util.List;
-
 import static otus.java.lupolov.model.Denomination.*;
 
 public class DemoATM {
 
+    public static final String REQUEST_SUM_TEMPLATE = "=========== REQUEST (sum = %s) =============%n";
+
     public static void main(String[] args) {
 
-        var cassetteHolder = new CassetteHolder(5);
-        var billDispenser = new BillDispenser();
-        var billSelector = new BillSelector();
+        var cassetteHolder = new CassetteHolderImpl();
+        var withdrawalMoneyRequestProcessor = new WithdrawalMoneyRequestProcessorImpl(cassetteHolder);
+        var billDispenser = new BillDispenserImpl(cassetteHolder);
 
-        var atm = new ATM(cassetteHolder, billDispenser, billSelector);
+        var atm = new ATMImpl(cassetteHolder, billDispenser, withdrawalMoneyRequestProcessor);
 
-        List<BillCassette> cassettes = prepareBillCassettes();
-        cassettes.forEach(atm::loadCassette);
+        var cassette1 = new BillCassette(ONE_THOUSAND, 10);
+        var cassette2 = new BillCassette(FIVE_HUNDRED, 10);
+        var cassette3 = new BillCassette(TWO_HUNDRED, 10);
+        var cassette4 = new BillCassette(ONE_HUNDRED, 10);
+        var cassette5 = new BillCassette(FIFTY, 10);
 
-        System.out.println("=========== REQUEST #1 =============");
+        atm.loadCassette(cassette1);
+        atm.loadCassette(cassette2);
+        atm.loadCassette(cassette3);
+        atm.loadCassette(cassette4);
+        atm.loadCassette(cassette5);
+
+        int sum = 3750;
+        System.out.printf(REQUEST_SUM_TEMPLATE, sum);
         int beforeBalance = atm.getBalance();
         System.out.println("beforeBalance = " + beforeBalance);
 
-        CashRequestResult requestResult = atm.getCash(3750);
+        CashRequestResult requestResult = atm.withdrawMoney(sum);
 
-        System.out.println("Status message = " + requestResult.status().message());
+        System.out.println("Status = " + requestResult.status());
+        System.out.println("Info message = " + requestResult.infoMessage());
         System.out.println("Bill list = " + requestResult.cash());
 
         int afterBalance = atm.getBalance();
         System.out.println("afterBalance = " + afterBalance);
 
-        System.out.println("=========== REQUEST #2 =============");
+        sum = 300;
+        System.out.printf(REQUEST_SUM_TEMPLATE, sum);
         beforeBalance = atm.getBalance();
         System.out.println("beforeBalance = " + beforeBalance);
 
-        requestResult = atm.getCash(330);
+        requestResult = atm.withdrawMoney(sum);
 
-        System.out.println("Status message  = " + requestResult.status().message());
+        System.out.println("Status = " + requestResult.status());
+        System.out.println("Info message = " + requestResult.infoMessage());
         System.out.println("Bill list = " + requestResult.cash());
 
         afterBalance = atm.getBalance();
         System.out.println("afterBalance = " + afterBalance);
-    }
 
-    private static List<BillCassette> prepareBillCassettes() {
+        sum = 2250;
+        System.out.printf(REQUEST_SUM_TEMPLATE, sum);
+        beforeBalance = atm.getBalance();
+        System.out.println("beforeBalance = " + beforeBalance);
 
-        var cassette1 = BillCassette.createCassette(ONE_THOUSAND, 10);
-        var cassette2 = BillCassette.createCassette(FIVE_HUNDRED, 10);
-        var cassette3 = BillCassette.createCassette(TWO_HUNDRED, 10);
-        var cassette4 = BillCassette.createCassette(ONE_HUNDRED, 10);
-        var cassette5 = BillCassette.createCassette(FIFTY, 10);
+        atm.extractCassette(cassette1);
 
-        return List.of(cassette1, cassette2, cassette3, cassette4, cassette5);
+        beforeBalance = atm.getBalance();
+        System.out.println("balance after extracting cassette with 1000 banknotes = " + beforeBalance);
+
+        requestResult = atm.withdrawMoney(sum);
+
+        System.out.println("Status = " + requestResult.status());
+        System.out.println("Info message = " + requestResult.infoMessage());
+        System.out.println("Bill list = " + requestResult.cash());
+
+        afterBalance = atm.getBalance();
+        System.out.println("afterBalance = " + afterBalance);
     }
 }

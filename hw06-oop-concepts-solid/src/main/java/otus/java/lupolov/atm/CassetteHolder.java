@@ -2,50 +2,20 @@ package otus.java.lupolov.atm;
 
 import otus.java.lupolov.model.Denomination;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class CassetteHolder {
+public interface CassetteHolder {
 
-    private final int cellsQuantity;
-    private final List<BillCassette> cassettes;
+    boolean loadCassette(BillCassette cassette);
 
-    public CassetteHolder(int cellsQuantity) {
-        this.cellsQuantity = cellsQuantity;
-        this.cassettes = new ArrayList<>(cellsQuantity);
-    }
+    boolean extractCassette(BillCassette cassette);
 
-    public boolean loadCassette(BillCassette cassette) {
+    Set<Denomination> getAvailableDenominations();
 
-        if (cassettes.size() >= cellsQuantity) {
-            return false;
-        }
+    List<BillCassette> getAllToCassetteByDenomination(Denomination denomination);
 
-        return cassettes.add(cassette);
-    }
+    int getAvailableCashBalance();
 
-    public boolean extractCassette(BillCassette cassette) {
-        return cassettes.remove(cassette);
-    }
-
-    public Set<Denomination> getAvailableDenominations() {
-
-        return cassettes.stream()
-                .filter(cell -> cell.getBalance() > 0)
-                .map(BillCassette::getDenomination)
-                .collect(Collectors.toSet());
-    }
-
-    public int getAvailableCashBalance() {
-
-        return cassettes.stream()
-                .map(cell -> cell.getBalance() * cell.getDenomination().value())
-                .reduce(0, Integer::sum);
-    }
-
-    public List<BillCassette> getCassettes() {
-        return cassettes;
-    }
+    int getBillBalanceByDenomination(Denomination denomination);
 }

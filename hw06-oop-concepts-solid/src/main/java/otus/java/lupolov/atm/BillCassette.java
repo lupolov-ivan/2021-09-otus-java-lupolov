@@ -3,35 +3,22 @@ package otus.java.lupolov.atm;
 import otus.java.lupolov.model.Bill;
 import otus.java.lupolov.model.Denomination;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BillCassette {
 
     private final Denomination denomination;
-    private final List<Bill> bills;
+    private Integer balance;
 
-    private BillCassette(Denomination denomination, List<Bill> bills) {
+    public BillCassette(Denomination denomination, Integer balance) {
         this.denomination = denomination;
-        this.bills = bills;
-    }
-
-    public static BillCassette createCassette(Denomination denomination, int capacity) {
-
-        List<Bill> bills = new ArrayList<>();
-
-        for (int i = 0; i < capacity; i++) {
-            bills.add(new Bill(denomination));
-        }
-
-        return new BillCassette(denomination, bills);
+        this.balance = balance;
     }
 
     public Bill extractBill() {
-        if (bills.isEmpty()) {
+        balance--;
+        if (balance == 0) {
             return null;
         }
-        return bills.remove(0);
+        return new Bill(denomination);
     }
 
     public Denomination getDenomination() {
@@ -39,6 +26,6 @@ public class BillCassette {
     }
 
     public int getBalance() {
-        return bills.size();
+        return balance;
     }
 }
