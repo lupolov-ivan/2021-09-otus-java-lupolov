@@ -5,4 +5,5 @@ include 'hw02-algorithms-and-generics'
 include 'hw03-reflections'
 include 'hw04-garbage-collectors'
 include 'hw05-byte-codes-and-aop'
+include 'hw06-oop-concepts-solid'
 
