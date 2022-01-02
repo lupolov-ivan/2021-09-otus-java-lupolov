@@ -7,4 +7,4 @@ include 'hw04-garbage-collectors'
 include 'hw05-byte-codes-and-aop'
 include 'hw06-oop-concepts-solid'
 include 'hw07-pattern-design'
-
+include 'hw08-serialization'
