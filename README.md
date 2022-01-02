@@ -15,3 +15,5 @@
 * \#4 module `hw04-garbage-collectors` ✅
 * \#5 module `hw05-byte-codes-and-aop` ✅
 * \#6 module `hw06-oop-concepts-solid` ✅
+* \#7 module `hw07-pattern-design` ✅
+* \#8 module `hw08-serialization` ✅
