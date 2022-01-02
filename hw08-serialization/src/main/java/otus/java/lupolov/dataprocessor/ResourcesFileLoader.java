@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import otus.java.lupolov.model.Measurement;
 
-import java.io.File;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 
 public class ResourcesFileLoader implements Loader {
@@ -24,13 +23,10 @@ public class ResourcesFileLoader implements Loader {
     @Override
     public List<Measurement> load() {
 
-        URL fileResource = this.getClass().getClassLoader().getResource(fileName);
+        ClassLoader classLoader = this.getClass().getClassLoader();
 
-        if (fileResource == null) {
-            throw new FileProcessException("File not found");
-        }
-        try {
-            return objectMapper.readerForListOf(Measurement.class).readValue(new File(fileResource.getFile()));
+        try(InputStream inputStream = classLoader.getResourceAsStream(fileName)) {
+            return objectMapper.readerForListOf(Measurement.class).readValue(inputStream.readAllBytes());
         } catch (Exception e) {
             throw new FileProcessException(e);
         }
