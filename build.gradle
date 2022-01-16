@@ -37,6 +37,8 @@ allprojects {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
             }
             dependency ("com.google.guava:guava:${guavaVersion}")
+            dependency ("org.testcontainers:postgresql:${postgresTestContainersVersion}")
+            dependency ("org.testcontainers:junit-jupiter:${postgresTestContainersVersion}")
         }
     }
 }
