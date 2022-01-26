@@ -20,6 +20,10 @@ public class Address {
     @Column(name = "street")
     private String street;
 
+    public Address copy() {
+        return new Address(this.id, this.street);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

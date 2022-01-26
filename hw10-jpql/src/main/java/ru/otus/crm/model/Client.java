@@ -1,19 +1,27 @@
 package ru.otus.crm.model;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@Getter @Setter @ToString
+import static java.util.stream.Collectors.toList;
+
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "client")
-public class Client implements Cloneable {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -39,18 +47,26 @@ public class Client implements Cloneable {
     }
 
     public void addPhone(Phone phone) {
-        phones.add( phone );
-        phone.setClient( this );
+        phones.add(phone);
+        phone.setClient(this);
     }
 
     public void removePhone(Phone phone) {
-        phones.remove( phone );
-        phone.setClient( null );
+        phones.remove(phone);
+        phone.setClient(null);
     }
 
-    @Override
-    public Client clone() {
-        return new Client(this.id, this.name, this.address, this.phones);
+    public Client copy() {
+
+        List<Phone> phoneCopies = this.phones == null
+                ? Collections.emptyList()
+                : this.phones.stream().filter(Objects::nonNull).map(Phone::copy).collect(toList());
+
+        Address addressCopy = this.address == null
+                ? null
+                : this.address.copy();
+
+        return new Client(this.id, this.name, addressCopy, phoneCopies);
     }
 
     @Override

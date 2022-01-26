@@ -1,5 +1,6 @@
 package ru.otus.core.repository;
 
+import junit.framework.AssertionFailedError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.base.AbstractHibernateTest;
@@ -9,6 +10,7 @@ import ru.otus.crm.model.Phone;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,66 +20,73 @@ class DataTemplateHibernateTest extends AbstractHibernateTest {
     @DisplayName(" корректно сохраняет, изменяет и загружает клиента по заданному id")
     void shouldSaveAndFindCorrectClientById() {
 
-        var address = new Address(null,"Deribasovskaya street");
-        var phone = new Phone(null, "11-111-11");
-        var phone2 = new Phone(null, "22-222-2222");
-        var client = new Client(null, "Vasya", address, (List.of(phone, phone2)));
+        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"),
+                List.of(new Phone(null, "13-555-22"), new Phone(null, "14-666-333")));
 
+        //when
         var savedClient = transactionManager.doInTransaction(session -> {
             clientTemplate.insert(session, client);
             return client;
         });
 
+        //then
         assertThat(savedClient.getId()).isNotNull();
         assertThat(savedClient.getName()).isEqualTo(client.getName());
-        assertThat(savedClient.getAddress()).isEqualTo(address);
-        assertThat(savedClient.getPhones()).hasSize(2)
-                .hasSameElementsAs(List.of(phone, phone2));
 
+        //when
+        var loadedSavedClient = transactionManager.doInReadOnlyTransaction(session ->{
+                    var res = clientTemplate.findById(session, savedClient.getId())
+                            .orElseThrow(() -> new AssertionFailedError("expected: not <null>"));
+                    return Optional.ofNullable(res.copy());
+                }
+        );
 
-       transactionManager.doInReadOnlyTransaction(session -> {
-           Optional<Client> optionalClient = clientTemplate.findById(session, savedClient.getId());
+        //then
+        assertThat(loadedSavedClient).isPresent().get()
+                .usingRecursiveComparison()
+                .isEqualTo(savedClient);
 
-            assertThat(optionalClient).isPresent().get().usingRecursiveComparison().isEqualTo(savedClient);
-
-            return optionalClient;
-        });
-
-        var updatedClient = savedClient.clone();
+        //when
+        var updatedClient = savedClient.copy();
         updatedClient.setName("updatedName");
         transactionManager.doInTransaction(session -> {
             clientTemplate.update(session, updatedClient);
             return null;
         });
 
-        transactionManager.doInReadOnlyTransaction(session -> {
-            Optional<Client> optionalClient = clientTemplate.findById(session, updatedClient.getId());
+        //then
+        var loadedClient = transactionManager.doInReadOnlyTransaction(session -> {
+                    var res = clientTemplate.findById(session, updatedClient.getId())
+                            .orElseThrow(() -> new AssertionFailedError("expected: not <null>"));
 
-            assertThat(optionalClient).isPresent().get().usingRecursiveComparison().isEqualTo(updatedClient);
+                    return Optional.of(res.copy());
+                }
+        );
+        assertThat(loadedClient).isPresent().get().usingRecursiveComparison().isEqualTo(updatedClient);
 
-            return optionalClient;
-        });
+        //when
+        var clientList = transactionManager.doInReadOnlyTransaction(session ->
+                clientTemplate.findAll(session).stream()
+                        .map(Client::copy).collect(Collectors.toList())
+        );
+
+        //then
+        assertThat(clientList.size()).isEqualTo(1);
+        assertThat(clientList.get(0))
+                .usingRecursiveComparison()
+                .isEqualTo(updatedClient);
 
 
-        transactionManager.doInReadOnlyTransaction(session -> {
-            List<Client> clientList = clientTemplate.findAll(session);
+        //when
+        clientList = transactionManager.doInReadOnlyTransaction(session ->
+                clientTemplate.findByEntityField(session, "name", "updatedName")
+                        .stream().map(Client::copy).collect(Collectors.toList())
+        );
 
-            assertThat(clientList.size()).isEqualTo(1);
-            assertThat(clientList.get(0)).usingRecursiveComparison().isEqualTo(updatedClient);
-
-            return clientList;
-        });
-
-
-        transactionManager.doInReadOnlyTransaction(session -> {
-
-            List<Client> clientList = clientTemplate.findByEntityField(session, "name", "updatedName");
-
-            assertThat(clientList.size()).isEqualTo(1);
-            assertThat(clientList.get(0)).usingRecursiveComparison().isEqualTo(updatedClient);
-
-            return clientList;
-        });
+        //then
+        assertThat(clientList.size()).isEqualTo(1);
+        assertThat(clientList.get(0))
+                .usingRecursiveComparison()
+                .isEqualTo(updatedClient);
     }
-
 }

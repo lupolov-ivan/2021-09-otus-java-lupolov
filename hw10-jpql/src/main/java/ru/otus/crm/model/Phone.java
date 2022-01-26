@@ -8,6 +8,7 @@ import java.util.Objects;
 
 @Getter @Setter @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "phone")
 public class Phone {
@@ -19,13 +20,17 @@ public class Phone {
     @Column(name = "number")
     private String number;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private Client client;
 
     public Phone(Long id, String number) {
         this.id = id;
         this.number = number;
+    }
+
+    public Phone copy() {
+        return new Phone(this.id, this.number, this.client);
     }
 
     @Override

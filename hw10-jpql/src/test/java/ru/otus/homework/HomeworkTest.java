@@ -28,8 +28,6 @@ class HomeworkTest {
     private Metadata metadata;
     private SessionFactory sessionFactory;
 
-    // Это надо раскомментировать, у выполненного ДЗ, все тесты должны проходить
-    // Кроме удаления комментирования, тестовый класс менять нельзя
     @BeforeEach
     public void setUp() {
         makeTestDependencies();
@@ -39,7 +37,6 @@ class HomeworkTest {
     public void tearDown() {
         sessionFactory.close();
     }
-
 
     @Test
     public void testHomeworkRequirementsForTablesCount() {
@@ -60,7 +57,8 @@ class HomeworkTest {
             }
         });
 
-        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22")));
+        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"),
+                List.of(new Phone(null, "13-555-22"), new Phone(null, "14-666-333")));
         try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             session.persist(client);
@@ -68,8 +66,10 @@ class HomeworkTest {
 
             session.clear();
 
-            var loadedClient = session.find(Client.class, 1L);
-            assertThat(loadedClient).usingRecursiveComparison().isEqualTo(client);
+            var loadedClient = session.find(Client.class, 1L).copy();
+            assertThat(loadedClient)
+                    .usingRecursiveComparison()
+                    .isEqualTo(client);
         }
     }
 
