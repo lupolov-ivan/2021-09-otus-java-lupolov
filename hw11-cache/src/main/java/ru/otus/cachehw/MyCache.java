@@ -1,6 +1,7 @@
 package ru.otus.cachehw;
 
 
+import lombok.extern.slf4j.Slf4j;
 import ru.otus.cachehw.listeners.Actions;
 import ru.otus.cachehw.listeners.HwListener;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+@Slf4j
 public class MyCache<K, V> implements HwCache<K, V> {
 
     private final Map<K,V> cache = new WeakHashMap<>();
@@ -44,6 +46,13 @@ public class MyCache<K, V> implements HwCache<K, V> {
     }
 
     private void notifyAll(K key, V value, String action) {
-        listeners.forEach(listener -> listener.notify(key, value, action));
+        for (HwListener<K, V> listener : listeners) {
+            try {
+                listener.notify(key, value, action);
+            }
+            catch (Exception ex) {
+                log.error("Unexpected error during notify listener", ex);
+            }
+        }
     }
 }
