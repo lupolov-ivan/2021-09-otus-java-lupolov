@@ -17,4 +17,6 @@
 * \#6 module `hw06-oop-concepts-solid` ✅
 * \#7 module `hw07-pattern-design` ✅
 * \#8 module `hw08-serialization` ✅
-* \#9 module `hw08-jdbc` ✅
+* \#9 module `hw09-jdbc` ✅
+* \#10 module `hw10-jpql` ✅
+* \#11 module `hw11-cache` ✅
