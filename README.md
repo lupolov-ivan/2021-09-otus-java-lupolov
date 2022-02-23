@@ -20,3 +20,4 @@
 * \#9 module `hw09-jdbc` ✅
 * \#10 module `hw10-jpql` ✅
 * \#11 module `hw11-cache` ✅
+* \#12 module `hw12-web-server` ✅

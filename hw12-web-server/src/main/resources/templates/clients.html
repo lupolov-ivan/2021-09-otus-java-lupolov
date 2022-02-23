@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Clients</title>
+        <script>
+            function getClientById() {
+                const clientIdTextBox = document.getElementById('clientIdTextBox');
+                const clientDataContainer = document.getElementById('clientDataContainer');
+                const id = clientIdTextBox.value;
+                fetch('api/clients/' + id)
+                    .then(response => response.json())
+                    .then(client => clientDataContainer.innerHTML = JSON.stringify(client, "", 4));
+            }
+        </script>
+    </head>
+
+    <body>
+        <div>
+            <h4>Get client by ID</h4>
+            <input type="text" id = "clientIdTextBox" value="3" placeholder="Enter client ID">
+            <button onclick="getClientById()">Get</button>
+            <pre id = "clientDataContainer"></pre>
+        </div>
+        <div>
+            <h4>All clients</h4>
+            <table style="width: 400px">
+                <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Address Street</td>
+                    <td>Phones</td>
+                </tr>
+                </thead>
+                <tbody>
+                <#list clients as client>
+                <tr>
+                    <td>${client.id}</td>
+                    <td>${client.name}</td>
+                    <#if client.address??>
+                    <td>${client.address.street}</td>
+                    <#else>
+                    <td></td>
+                    </#if>
+                    <td>
+                        <#if client.phones?has_content>
+                        <select>
+                            <#list client.phones as phone>
+                            <option>${phone.number}</option>
+                            </#list>
+                        </select>
+                        </#if>
+                    </td>
+                </tr>
+                </#list>
+                </tbody>
+            </table>
+        </div>
+        <br/>
+        <div>
+            <a href="/clients/add">Create new client (Only admin user)</a>
+        </div>
+    </body>
+</html>

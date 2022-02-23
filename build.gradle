@@ -40,6 +40,15 @@ allprojects {
             dependency ("org.testcontainers:postgresql:${postgresTestContainersVersion}")
             dependency ("org.testcontainers:junit-jupiter:${postgresTestContainersVersion}")
             dependency ("org.reflections:reflections:${reflectionsVersion}")
+            dependency ("org.freemarker:freemarker:${freemarkerVersion}")
+            dependency ("com.google.code.gson:gson:${gsonVersion}")
+            dependency ("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-server:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-webapp:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-security:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-http:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-io:${jettyVersion}")
+            dependency ("org.eclipse.jetty:jetty-util:${jettyVersion}")
         }
     }
 }
