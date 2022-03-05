@@ -1,7 +1,8 @@
 package ru.otus.model;
 
 public class GameResult {
-    private static final String RESULT_PATTERN = "Уважаемый: %s. Всего было примеров: %d, отвечено верно: %d";
+
+    private static final String RESULT_PATTERN = "Dear: %s. There were a total of %d examples, answered correctly: %d";
 
     private final Player player;
     private int total;

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class GameProcessorImpl implements GameProcessor {
 
-    private static final String MSG_HEADER = "Проверка знаний таблицы умножения";
-    private static final String MSG_INPUT_BASE = "Введите цифру от 1 до 10";
-    private static final String MSG_RIGHT_ANSWER = "Верно\n";
-    private static final String MSG_WRONG_ANSWER = "Не верно\n";
+    private static final String MSG_HEADER = "Multiplication table knowledge test";
+    private static final String MSG_INPUT_BASE = "Enter number from 1 to 10";
+    private static final String MSG_RIGHT_ANSWER = "Right\n";
+    private static final String MSG_WRONG_ANSWER = "Wrong\n";
 
     private final IOService ioService;
     private final EquationPreparer equationPreparer;

@@ -12,8 +12,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player getPlayer() {
-        ioService.out("Представьтесь пожалуйста");
-        String playerName = ioService.readLn("Введите имя: ");
+        ioService.out("Introduce yourself, please");
+        String playerName = ioService.readLn("Enter the name: ");
         return new Player(playerName);
     }
 }

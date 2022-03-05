@@ -1,13 +1,12 @@
 package ru.otus;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import ru.otus.appcontainer.AppComponentsContainerImpl;
-import ru.otus.appcontainer.api.AppComponentsContainer;
-import ru.otus.config.AppConfig;
-import ru.otus.services.*;
+import ru.otus.services.EquationPreparer;
+import ru.otus.services.IOService;
+import ru.otus.services.PlayerService;
 
 import java.io.PrintStream;
 import java.lang.reflect.Modifier;
@@ -19,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
 
-    @Disabled //надо удалить
     @DisplayName("Из контекста тремя способами должен корректно доставаться компонент с проставленными полями")
     @ParameterizedTest(name = "Достаем по: {0}")
     @CsvSource(value = {"GameProcessor, ru.otus.services.GameProcessor",
@@ -39,7 +37,8 @@ class AppTest {
             "equationPreparer, ru.otus.services.EquationPreparer"
     })
     public void shouldExtractFromContextCorrectComponentWithNotNullFields(String classNameOrBeanId, Class<?> rootClass) throws Exception {
-        var ctx = new AppComponentsContainerImpl(AppConfig.class);
+
+        var ctx = new AppComponentsContainerImpl("ru.otus.config");
 
         assertThat(classNameOrBeanId).isNotEmpty();
         Object component;
