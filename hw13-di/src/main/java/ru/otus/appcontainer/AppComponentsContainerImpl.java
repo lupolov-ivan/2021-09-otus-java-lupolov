@@ -1,14 +1,9 @@
 package ru.otus.appcontainer;
 
-import lombok.SneakyThrows;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import ru.otus.appcontainer.api.AppComponent;
-import ru.otus.appcontainer.api.AppComponentsContainer;
-import ru.otus.appcontainer.api.AppComponentsContainerConfig;
-import ru.otus.appcontainer.api.ComponentInitializationException;
+import ru.otus.appcontainer.api.*;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -26,7 +21,6 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         processConfig(findConfigClasses(packageName));
     }
 
-    @SneakyThrows
     private void processConfig(Class<?>... configClasses) {
 
         checkConfigClass(configClasses);
@@ -37,8 +31,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
         for (Class<?> configClass : orderedConfigClasses) {
 
-            Constructor<?> constructor = configClass.getDeclaredConstructor();
-            Object configInstance = constructor.newInstance();
+            Object configInstance = ReflectionUtils.getConfigInstance(configClass);
 
             List<Method> factoryMethods = Arrays.stream(configClass.getDeclaredMethods())
                     .filter(m -> m.isAnnotationPresent(AppComponent.class))
@@ -60,11 +53,14 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                     args[i] = appComponent;
                 }
 
-                Object component = method.invoke(configInstance, args);
-                appComponents.add(component);
+                Object component = ReflectionUtils.getComponentInstance(configInstance, method, args);
+                AppComponent componentMetaData = method.getAnnotation(AppComponent.class);
+                String componentName = componentMetaData.name();
 
-                AppComponent annotation = method.getAnnotation(AppComponent.class);
-                appComponentsByName.put(annotation.name(), component);
+                if (!appComponentsByName.containsKey(componentName)) {
+                    appComponentsByName.put(componentName, component);
+                    appComponents.add(component);
+                }
             }
         }
     }
