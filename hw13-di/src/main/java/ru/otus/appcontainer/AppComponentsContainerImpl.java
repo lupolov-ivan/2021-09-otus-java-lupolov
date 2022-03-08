@@ -58,9 +58,11 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 String componentName = componentMetaData.name();
 
                 if (!appComponentsByName.containsKey(componentName)) {
-                    appComponentsByName.put(componentName, component);
-                    appComponents.add(component);
+                    String errMsg = String.format("The context already has a component named '%s'", componentName);
+                    throw new IllegalStateException(errMsg);
                 }
+                appComponentsByName.put(componentName, component);
+                appComponents.add(component);
             }
         }
     }
