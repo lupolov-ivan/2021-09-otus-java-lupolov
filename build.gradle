@@ -39,6 +39,7 @@ allprojects {
             dependency ("com.google.guava:guava:${guavaVersion}")
             dependency ("org.testcontainers:postgresql:${postgresTestContainersVersion}")
             dependency ("org.testcontainers:junit-jupiter:${postgresTestContainersVersion}")
+            dependency ("org.reflections:reflections:${reflectionsVersion}")
             dependency ("org.freemarker:freemarker:${freemarkerVersion}")
             dependency ("com.google.code.gson:gson:${gsonVersion}")
             dependency ("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
